@@ -6,13 +6,13 @@ from backend.services import claude_service, supabase_service
 
 router = APIRouter(prefix="/receipts", tags=["receipts"])
 
-ALLOWED_TYPES = {"image/jpeg", "image/jpg", "image/png", "image/webp", "image/heic"}
+ALLOWED_TYPES = {"image/jpeg", "image/jpg", "image/png", "image/webp", "image/heic", "image/heif"}
 MAX_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
 
 
 @router.post("/upload")
 async def upload_receipt(file: UploadFile = File(...)):
-    if file.content_type not in ALLOWED_TYPES:
+    if not file.content_type or file.content_type not in ALLOWED_TYPES:
         raise HTTPException(400, "Please upload a JPEG, PNG, or WebP image.")
 
     image_bytes = await file.read()
