@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Nourish</title>
+  <link rel="stylesheet" href="/static/css/app.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">🌿 Nourish</a>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/dashboard" class="nav-link active">Dashboard</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+  <div class="container">
+
+    <!-- Header + period tabs -->
+    <div class="page-header">
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h1 class="page-title">Your food report</h1>
+          <p class="page-subtitle" id="dashSubtitle">Loading…</p>
+        </div>
+        <a href="/" class="btn btn-primary btn-sm">+ Add receipt</a>
+      </div>
+    </div>
+
+    <!-- Period selector -->
+    <div class="tabs" style="margin-bottom:24px;">
+      <div class="tab active" onclick="setPeriod(this, 7)">7 days</div>
+      <div class="tab" onclick="setPeriod(this, 30)">30 days</div>
+      <div class="tab" onclick="setPeriod(this, 90)">3 months</div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state hidden" id="emptyState">
+      <span class="empty-icon">🛒</span>
+      <p class="empty-title">No receipts yet</p>
+      <p class="empty-text">Upload your first grocery receipt to see your food report.</p>
+      <a href="/" class="btn btn-primary" style="margin-top:20px;">Upload a receipt</a>
+    </div>
+
+    <div id="dashContent" class="hidden">
+
+      <!-- ── Stats row ──────────────────────────────────────────────────── -->
+      <div class="stats-row section">
+        <div class="stat-card">
+          <div class="stat-value" id="statTotal">—</div>
+          <div class="stat-label">Total spent</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statReceipts">—</div>
+          <div class="stat-label">Receipts</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value text-green" id="statScore">—</div>
+          <div class="stat-label">Health score</div>
+        </div>
+      </div>
+
+      <!-- ── Health report ──────────────────────────────────────────────── -->
+      <div class="section card">
+        <div class="card-title">Your health coverage <span style="font-size:.7rem;color:var(--text-muted);">(last 14 days)</span></div>
+
+        <div class="health-score-wrap" id="healthScoreWrap">
+          <div class="score-circle">
+            <svg viewBox="0 0 80 80" width="80" height="80">
+              <circle class="score-circle-track" cx="40" cy="40" r="32" />
+              <circle class="score-circle-fill" id="scoreArc" cx="40" cy="40" r="32"
+                stroke-dasharray="201" stroke-dashoffset="201" />
+            </svg>
+            <div class="score-number" id="scoreNumber">—</div>
+          </div>
+          <div class="score-info">
+            <div class="score-message" id="scoreMessage">Loading your health report…</div>
+            <div class="score-sub" id="scoreSub"></div>
+          </div>
+        </div>
+
+        <!-- Body map grid -->
+        <div class="body-grid" id="bodyGrid"></div>
+      </div>
+
+      <!-- ── Spending breakdown ─────────────────────────────────────────── -->
+      <div class="section card">
+        <div class="card-title">Where your money goes</div>
+        <div class="donut-wrap">
+          <canvas id="donutChart"></canvas>
+        </div>
+        <div id="spendingList"></div>
+      </div>
+
+      <!-- ── Weekly trend ───────────────────────────────────────────────── -->
+      <div class="section card" id="trendSection">
+        <div class="card-title">Weekly spending</div>
+        <div class="chart-wrap">
+          <canvas id="trendChart"></canvas>
+        </div>
+      </div>
+
+      <!-- ── Nutrient gaps ──────────────────────────────────────────────── -->
+      <div class="section" id="gapsSection">
+        <div class="section-title">
+          <span>What your body is missing</span>
+          <span class="text-sm text-muted" id="gapsCount"></span>
+        </div>
+        <div id="gapsList"></div>
+      </div>
+
+      <!-- ── Recent receipts ────────────────────────────────────────────── -->
+      <div class="section">
+        <div class="section-title">
+          <span>Recent receipts</span>
+        </div>
+        <div class="card">
+          <div id="receiptList"></div>
+        </div>
+      </div>
+
+    </div><!-- /dashContent -->
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>
