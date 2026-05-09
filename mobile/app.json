@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "Nourish",
+    "slug": "nourish",
+    "scheme": "nourish",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "platforms": ["ios", "android"],
+    "icon": "./assets/icon.png",
+    "splash": {
+      "backgroundColor": "#FAFAF8"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Nourish uses your camera to scan grocery receipts.",
+        "NSPhotoLibraryUsageDescription": "Nourish reads receipts from your photo library."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#FAFAF8"
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Nourish reads receipts from your photo library.",
+          "cameraPermission": "Nourish uses your camera to scan grocery receipts."
+        }
+      ]
+    ]
+  }
+}
