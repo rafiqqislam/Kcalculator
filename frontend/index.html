@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nourish — Grocery Tracker</title>
+  <link rel="stylesheet" href="/static/css/app.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">🌿 Nourish</a>
+    <div class="nav-links">
+      <a href="/" class="nav-link active">Home</a>
+      <a href="/dashboard" class="nav-link">Dashboard</a>
+    </div>
+  </div>
+</nav>
+
+<div class="loading-overlay hidden" id="loadingOverlay">
+  <div class="spinner"></div>
+  <p class="loading-text" id="loadingText">Reading your receipt…</p>
+</div>
+
+<main class="page">
+  <div class="container">
+
+    <div class="page-header">
+      <h1 class="page-title">What did you buy?</h1>
+      <p class="page-subtitle">Upload a photo of your grocery receipt and we'll handle the rest.</p>
+    </div>
+
+    <!-- Upload zone -->
+    <div class="upload-zone" id="uploadZone">
+      <input type="file" id="fileInput" accept="image/*" />
+      <span class="upload-icon">📷</span>
+      <p class="upload-title">Take a photo or browse files</p>
+      <p class="upload-hint">JPEG, PNG or WebP · Max 10 MB</p>
+    </div>
+
+    <!-- Mobile camera shortcut -->
+    <div style="display:flex; gap:10px; margin-top:12px;">
+      <label class="btn btn-secondary" style="flex:1; cursor:pointer;">
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;" />
+        📷 Take photo
+      </label>
+      <label class="btn btn-secondary" style="flex:1; cursor:pointer;">
+        <input type="file" id="galleryInput" accept="image/*" style="display:none;" />
+        🖼️ Browse gallery
+      </label>
+    </div>
+
+    <!-- Manual entry shortcut -->
+    <div style="margin-top:10px; text-align:center;">
+      <a href="/manual" class="btn btn-ghost btn-sm" style="color:var(--text-secondary);">
+        ✍️ No receipt? Add items manually
+      </a>
+    </div>
+
+    <!-- Recent receipts -->
+    <div class="section mt-8" id="recentSection">
+      <div class="section-title">
+        <span>Recent receipts</span>
+        <a href="/dashboard" class="btn btn-ghost btn-sm">See all →</a>
+      </div>
+      <div class="card" id="recentList">
+        <div class="empty-state">
+          <span class="empty-icon">🧾</span>
+          <p class="empty-title">No receipts yet</p>
+          <p class="empty-text">Upload your first receipt to get started.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="/static/js/upload.js"></script>
+</body>
+</html>

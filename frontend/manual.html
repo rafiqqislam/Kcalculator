@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nourish — Add Items Manually</title>
+  <link rel="stylesheet" href="/static/css/app.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">🌿 Nourish</a>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/dashboard" class="nav-link">Dashboard</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+  <div class="container">
+
+    <div class="page-header">
+      <h1 class="page-title">Add items manually</h1>
+      <p class="page-subtitle">Type items you bought that weren't on a receipt — we'll categorise them automatically.</p>
+    </div>
+
+    <!-- Item entry form -->
+    <div class="card" style="margin-bottom: 20px; padding: 20px;">
+      <div style="margin-bottom: 16px;">
+        <label class="form-label">Item name</label>
+        <div style="position:relative;">
+          <input
+            type="text"
+            id="itemName"
+            class="form-input"
+            placeholder="e.g. Almond milk, Salmon fillet, Greek yogurt…"
+            autocomplete="off"
+          />
+          <div id="classifySpinner" style="display:none; position:absolute; right:12px; top:50%; transform:translateY(-50%);">
+            <div class="spinner-sm"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Classification badge (auto-populated) -->
+      <div id="classifyResult" style="display:none; margin-bottom:16px;">
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span id="foodGroupBadge" class="badge">—</span>
+          <div id="nutrientTags" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
+        </div>
+      </div>
+
+      <!-- Price + quantity row -->
+      <div style="display:flex; gap:12px; margin-bottom:16px;">
+        <div style="flex:1;">
+          <label class="form-label">Price ($)</label>
+          <input type="number" id="itemPrice" class="form-input" min="0" step="0.01" placeholder="0.00" />
+        </div>
+        <div style="flex:1;">
+          <label class="form-label">Quantity</label>
+          <input type="number" id="itemQty" class="form-input" min="0.1" step="0.1" placeholder="1" />
+        </div>
+        <div style="flex:1;">
+          <label class="form-label">Unit</label>
+          <input type="text" id="itemUnit" class="form-input" placeholder="kg / L / pcs" />
+        </div>
+      </div>
+
+      <button id="addBtn" class="btn btn-secondary" disabled>+ Add to list</button>
+    </div>
+
+    <!-- Running list -->
+    <div id="itemListSection" style="display:none;">
+      <div class="section-title" style="margin-bottom:12px;">
+        <span>Items to save</span>
+        <span id="itemCount" style="font-size:13px; color:var(--text-secondary);"></span>
+      </div>
+
+      <div class="card" id="itemList" style="margin-bottom:20px;"></div>
+
+      <!-- Save footer -->
+      <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:40px;">
+        <div style="flex:1; min-width:160px;">
+          <label class="form-label">Store / occasion <span style="color:var(--text-muted);">(optional)</span></label>
+          <input type="text" id="storeName" class="form-input" placeholder="Farmers market, Home garden…" />
+        </div>
+        <div style="flex:1; min-width:140px;">
+          <label class="form-label">Date <span style="color:var(--text-muted);">(optional)</span></label>
+          <input type="date" id="purchaseDate" class="form-input" />
+        </div>
+      </div>
+
+      <button id="saveBtn" class="btn btn-primary" style="width:100%;">Save all items</button>
+    </div>
+
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="/static/js/manual.js"></script>
+</body>
+</html>
