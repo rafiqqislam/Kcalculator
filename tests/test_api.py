@@ -205,6 +205,47 @@ def test_dashboard_total_spent_matches_input():
     assert res.json()["total_spent"] == 94.50
 
 
+# ── Classify item ─────────────────────────────────────────────────────────
+
+FAKE_CLASSIFY = {"food_group": "produce", "nutrient_tags": ["vitamin_c", "fibre"]}
+
+
+def test_classify_returns_classification_from_cache():
+    with patch("backend.routes.items.supabase_service.lookup_item_cache", return_value=FAKE_CLASSIFY):
+        res = client.post("/api/items/classify", json={"name": "Apple"})
+    assert res.status_code == 200
+    data = res.json()
+    assert data["food_group"] == "produce"
+    assert "vitamin_c" in data["nutrient_tags"]
+    assert data["cached"] is True
+
+
+def test_classify_calls_claude_when_cache_misses():
+    with (
+        patch("backend.routes.items.supabase_service.lookup_item_cache", return_value=None),
+        patch("backend.routes.items.claude_service.classify_item", return_value=FAKE_CLASSIFY),
+    ):
+        res = client.post("/api/items/classify", json={"name": "Fresh spinach"})
+    assert res.status_code == 200
+    data = res.json()
+    assert data["food_group"] == "produce"
+    assert data["cached"] is False
+
+
+def test_classify_rejects_empty_name():
+    res = client.post("/api/items/classify", json={"name": "   "})
+    assert res.status_code == 400
+
+
+def test_classify_returns_500_when_claude_fails():
+    with (
+        patch("backend.routes.items.supabase_service.lookup_item_cache", return_value=None),
+        patch("backend.routes.items.claude_service.classify_item", side_effect=Exception("API error")),
+    ):
+        res = client.post("/api/items/classify", json={"name": "Mystery item"})
+    assert res.status_code == 500
+
+
 # ── Pages served ──────────────────────────────────────────────────────────
 
 def test_home_page_served():
@@ -220,4 +261,9 @@ def test_review_page_served():
 
 def test_dashboard_page_served():
     res = client.get("/dashboard")
+    assert res.status_code == 200
+
+
+def test_manual_page_served():
+    res = client.get("/manual")
     assert res.status_code == 200

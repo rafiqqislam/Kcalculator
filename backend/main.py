@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from backend.routes import receipts, dashboard
+from backend.routes import receipts, dashboard, items
 
 BASE_DIR = Path(__file__).parent.parent  # project root
 
@@ -20,6 +20,7 @@ app.add_middleware(
 
 app.include_router(receipts.router, prefix="/api")
 app.include_router(dashboard.router, prefix="/api")
+app.include_router(items.router, prefix="/api")
 
 app.mount("/static", StaticFiles(directory=BASE_DIR / "frontend" / "static"), name="static")
 
@@ -42,3 +43,8 @@ async def serve_review():
 @app.get("/dashboard")
 async def serve_dashboard():
     return FileResponse(BASE_DIR / "frontend" / "dashboard.html")
+
+
+@app.get("/manual")
+async def serve_manual():
+    return FileResponse(BASE_DIR / "frontend" / "manual.html")

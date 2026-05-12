@@ -46,3 +46,12 @@ export async function fetchDashboard(days: number): Promise<DashboardSummary> {
   const res = await fetch(`${API_URL}/api/dashboard/summary?days=${days}`);
   return handleResponse<DashboardSummary>(res);
 }
+
+export async function classifyItem(name: string): Promise<{ food_group: string; nutrient_tags: string[] }> {
+  const res = await fetch(`${API_URL}/api/items/classify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name }),
+  });
+  return handleResponse<{ food_group: string; nutrient_tags: string[] }>(res);
+}

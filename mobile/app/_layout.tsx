@@ -17,6 +17,16 @@ export default function RootLayout() {
             headerShadowVisible: true,
           }}
         />
+        <Stack.Screen
+          name="manual"
+          options={{
+            title: 'Add Items Manually',
+            headerBackTitle: 'Back',
+            headerTintColor: '#16A34A',
+            headerStyle: { backgroundColor: '#FFFFFF' },
+            headerShadowVisible: true,
+          }}
+        />
       </Stack>
     </>
   );

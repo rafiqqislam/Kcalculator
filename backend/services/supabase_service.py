@@ -74,6 +74,21 @@ def _update_item_cache(supabase: Client, items: list[ReceiptItem]) -> None:
         ).execute()
 
 
+def lookup_item_cache(name: str) -> dict | None:
+    """Check if an item name has been classified before. Returns {food_group, nutrient_tags} or None."""
+    supabase = get_supabase()
+    result = (
+        supabase.table("item_cache")
+        .select("food_group, nutrient_tags")
+        .eq("name_normalized", name.lower().strip())
+        .limit(1)
+        .execute()
+    )
+    if result.data:
+        return {"food_group": result.data[0]["food_group"], "nutrient_tags": result.data[0]["nutrient_tags"] or []}
+    return None
+
+
 def get_receipts(limit: int = 20) -> list[dict]:
     supabase = get_supabase()
     return (

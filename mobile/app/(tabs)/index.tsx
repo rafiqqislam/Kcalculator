@@ -142,6 +142,11 @@ export default function HomeScreen() {
           </Pressable>
         </View>
 
+        {/* Manual entry */}
+        <Pressable style={({ pressed }) => [styles.manualBtn, pressed && { opacity: 0.7 }]} onPress={() => router.push('/manual')}>
+          <Text style={styles.manualBtnText}>✍️  No receipt? Add items manually</Text>
+        </Pressable>
+
         {/* Recent receipts */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Recent receipts</Text>
@@ -241,4 +246,9 @@ const styles = StyleSheet.create({
   receiptStore: { fontSize: 15, fontWeight: '600', color: Colors.text },
   receiptDate: { fontSize: 13, color: Colors.textSecondary, marginTop: 2 },
   receiptAmount: { fontSize: 15, fontWeight: '700', color: Colors.text },
+
+  manualBtn: {
+    alignItems: 'center', paddingVertical: 12, marginBottom: 24,
+  },
+  manualBtnText: { fontSize: 14, color: Colors.textSecondary, fontWeight: '500' },
 });
