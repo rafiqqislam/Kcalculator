@@ -54,6 +54,30 @@ Rules:
 - Return ONLY valid JSON. No explanation, no markdown fences."""
 
 
+ITEM_CLASSIFY_PROMPT = """Classify this grocery item: "{name}"
+
+Return JSON only, no explanation:
+{{"food_group": "produce|protein|dairy|grains|snacks|beverages|condiments|non_food", "nutrient_tags": ["pick from: vitamin_a,vitamin_b12,vitamin_c,vitamin_d,vitamin_e,vitamin_k,calcium,iron,magnesium,potassium,zinc,selenium,omega3,fibre,protein,probiotics,prebiotics,folate,biotin,antioxidants"]}}"""
+
+
+def classify_item(name: str) -> dict:
+    """Classify a single grocery item name into food group + nutrient tags."""
+    client = Anthropic(api_key=get_settings().anthropic_api_key)
+    message = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=200,
+        messages=[{"role": "user", "content": ITEM_CLASSIFY_PROMPT.format(name=name)}],
+    )
+    json_match = re.search(r"\{.*\}", message.content[0].text, re.DOTALL)
+    if not json_match:
+        return {"food_group": "non_food", "nutrient_tags": []}
+    raw = json.loads(json_match.group())
+    return {
+        "food_group": raw.get("food_group", "non_food"),
+        "nutrient_tags": raw.get("nutrient_tags") or [],
+    }
+
+
 def parse_receipt(image_bytes: bytes, content_type: str) -> ParsedReceipt:
     client = Anthropic(api_key=get_settings().anthropic_api_key)
     encoded = base64.standard_b64encode(image_bytes).decode("utf-8")
